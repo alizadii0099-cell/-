@@ -1,88 +1,178 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>QR Scanner | ALI-MD</title>
-<link rel="icon" href="https://files.catbox.moe/e5b2az.jpg" type="image/png">
-<link rel="stylesheet" href="/css/style.css">
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1737874207490861"
+            crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHATSAPP BOT QR SCANER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&amp;display=swap" rel="stylesheet">
+    <title>QR</title>
+    <style>
+        .bg {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: 400% 400%;
+            animation: AnimateBG 25s ease infinite;
+        }
+
+        @keyframes AnimateBG {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Outfit";
+            background: linear-gradient(-45deg, #4a90e2, #3ac569, #9b59b6, #e74c3c);
+            background-size: 400% 400%;
+            animation: gradient 10s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        jsl.code {
+            overflow: hidden;
+            background: linear-gradient(-45deg, #f1c40f, #3498db, #2ecc71, #e74c3c);
+            background-size: 400% 400%;
+            animation: gradient 8s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Montserrat', sans-serif;
+            height: 110vh;
+            margin: 0px;
+
+        }
+
+        p.legend {
+            color: #fff;
+            font-size: 1em;
+            font-weight: 400;
+            padding: 0em 1.1em;
+            margin-top: 0.1em;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        :root {
+            --main-color: hsl(212, 45%, 89%);
+            --principalText-color: hsl(218, 44%, 22%);
+            --secondText-color: hsl(220, 15%, 55%);
+        }
+
+        #content {
+            display: flex;
+            flex-direction: column;
+            width: 22rem;
+            text-align: center;
+            background-color: #000000;
+            padding: 1rem;
+            border-radius: 14px;
+        }
+
+        #QR-content img {
+            border-radius: 10px;
+            width: 20rem;
+        }
+
+        #title-container {
+            padding: 1rem 1rem 0 1rem;
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        #description-container {
+            padding: 0 2.5rem 0 2.5rem;
+            color: #fff;
+            margin-bottom: 2rem;
+        }
+
+        #p-legend {
+            font-size: 1em;
+            font-weight: 400;
+            padding: 0em 1.1em;
+            margin-top: 0.1em;
+        }
+
+        .reload-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db; /* Blue color */
+            color: #fff; /* White text color */
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .reload-button:hover {
+            background-color: #2980b9; /* Darker blue color on hover */
+        }
+    </style>
+    <script>
+        var timeleft = 30;
+        var downloadTimer = setInterval(function () {
+            if (timeleft <= 0) {
+                clearInterval(downloadTimer);
+                document.getElementById("progressBar").remove();
+                document.getElementById("main").innerHTML = "QR Expired! Please reload";
+                document.getElementById("legend").innerHTML = ""
+            }
+            document.getElementById("progressBar").value = 30 - timeleft;
+            timeleft -= 1;
+        }, 1000);
+    </script>
 </head>
-<body class="antialiased min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-[#0f0825] to-[#1a103d]">
-<main class="w-full max-w-2xl">
-    <div class="text-center mb-8 fade-in-up">
-        <a href="/" class="inline-flex items-center space-x-3 mb-6">
-            <img src="https://files.catbox.moe/e5b2az.jpg" alt="ALI-MD Logo" class="w-16 h-16 rounded-full border-2 border-pink-500 shadow-lg">
-            <span class="text-3xl font-black hero-title-gradient">ALI-MD</span>
-        </a>
-        <h1 class="text-4xl md:text-5xl font-black text-white mb-4">QR Code Pairing</h1>
-        <p class="text-lg text-gray-300">Scan the QR code to connect your WhatsApp</p>
-    </div>
-
-    <div class="feature-card-advanced rounded-2xl p-8 mb-6 fade-in-up">
-        <div id="qr-container" class="bg-white rounded-xl p-6 mb-6 flex items-center justify-center min-h-[300px] relative">
-            <div id="loading" class="text-center absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-90 rounded-xl">
-                <div class="inline-block w-12 h-12 border-4 border-pink-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-                <p class="text-gray-600 font-semibold">Generating QR Code...</p>
-            </div>
-            <img id="qr-image" class="hidden max-w-full h-auto z-10" alt="QR Code">
+<body>
+<div class="bg">
+    <div id="content">
+        <div id="QR-content">
+            <img id="qr-image" src="/server" alt="QR CODE">
         </div>
-
-        <div class="space-y-4">
-            <div class="glass-effect rounded-xl p-4">
-                <h3 class="text-white font-bold mb-3 flex items-center gap-2">
-                    <i class="fas fa-info-circle text-pink-400"></i>
-                    How to Scan
-                </h3>
-                <ol class="space-y-2 text-gray-300 text-sm">
-                    <li class="flex items-start gap-2"><span class="text-pink-400 font-bold">1.</span>Open WhatsApp on your phone</li>
-                    <li class="flex items-start gap-2"><span class="text-pink-400 font-bold">2.</span>Go to Settings → Linked Devices</li>
-                    <li class="flex items-start gap-2"><span class="text-pink-400 font-bold">3.</span>Tap "Link a Device"</li>
-                    <li class="flex items-start gap-2"><span class="text-pink-400 font-bold">4.</span>Point your camera at the QR code above</li>
-                </ol>
-            </div>
+        <div id="title-container">
+            <h2 id="main">WHATSAPP-BOT QR</h2>
+            <p class="legend" id="legend">Scan The QR Code</p>
         </div>
-
-        <div class="text-center mt-6">
-            <a href="/pair" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-pink-500/30 text-pink-400 font-semibold hover:bg-pink-500/10 transition">
-                <i class="fas fa-phone"></i>
-                <span>Use Phone Pairing</span>
-            </a>
+        <div id="description-container">
+            <p id="semi" class="legend"></p>
+            <progress value="0" max="30" id="progressBar"></progress>
         </div>
+        <a href="javascript:history.go(0)" class="reload-button">Reload Page</a>
     </div>
-
-    <div class="text-center fade-in-up mt-4">
-        <a href="/" class="inline-flex items-center gap-2 text-gray-400 hover:text-pink-400 transition">
-            <i class="fas fa-arrow-left"></i>
-            <span>Back to Home</span>
-        </a>
-    </div>
-</main>
-
-<script>
-const qrImage = document.getElementById('qr-image');
-const loading = document.getElementById('loading');
-
-async function getQRCode() {
-    try {
-        const response = await fetch('/qr');
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const blob = await response.blob(); // receive PNG
-        qrImage.src = URL.createObjectURL(blob);
-        qrImage.classList.remove('hidden');
-        loading.classList.add('hidden');
-    } catch (error) {
-        console.error('Error fetching QR code:', error);
-        loading.innerHTML = `<p class="text-red-600 font-semibold">Failed to load QR code. Retrying in 3s...</p>`;
-        setTimeout(getQRCode, 3000);
-    }
-}
-
-window.addEventListener('load', getQRCode);
-</script>
+</div>
 </body>
 </html>
