@@ -7,8 +7,7 @@ const { upload } = require('./mega');
 
 let router = express.Router();
 
-const MESSAGE = `
-「 SESSION ID CONNECTED 」
+const MESSAGE = `「 SESSION ID CONNECTED 」
 *╭──────────────────⳹*
 *│✅ ʏᴏᴜʀ sᴇssɪᴏɴ ɪᴅ ɪs ʀᴇᴀᴅʏ!*
 *│⚠️ ᴋᴇᴇᴘ ɪᴛ ᴘʀɪᴠᴀᴛᴇ ᴀɴᴅ sᴇᴄᴜʀᴇ*
@@ -20,8 +19,7 @@ const MESSAGE = `
 *https://whatsapp.com/channel/0029VaoRxGmJpe8lgCqT1T2h*
 
 🖇️ *ɢɪᴛʜᴜʙ ʀᴇᴘᴏ:*  
-*https://github.com/ALI-INXIDE/ALI-MD*
-`;
+*https://github.com/ALI-INXIDE/ALI-MD*`;
 
 // ✅ Use dynamic import for Baileys (ESM support)
 async function loadBaileys() {
