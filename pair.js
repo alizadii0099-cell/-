@@ -21,12 +21,10 @@ const MESSAGE = `「 SESSION ID CONNECTED 」
 🖇️ *ɢɪᴛʜᴜʙ ʀᴇᴘᴏ:*  
 *https://github.com/ALI-INXIDE/ALI-MD*`;
 
-// ✅ Use dynamic import for Baileys (ESM support)
 async function loadBaileys() {
     return await import('@whiskeysockets/baileys');
 }
 
-// Ensure the directory is empty on startup
 if (fs.existsSync('./auth_info_baileys')) {
     fs.emptyDirSync(__dirname + '/auth_info_baileys');
 }
@@ -62,9 +60,7 @@ router.get('/', async (req, res) => {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
                 const code = await Smd.requestPairingCode(num);
-                if (!res.headersSent) {
-                    res.send({ code });
-                }
+                if (!res.headersSent) res.send({ code });
             }
 
             Smd.ev.on('creds.update', saveCreds);
@@ -77,11 +73,9 @@ router.get('/', async (req, res) => {
                         await delay(3000);
 
                         if (fs.existsSync('./auth_info_baileys/creds.json')) {
+                            
                             const auth_path = './auth_info_baileys/';
-                            const phoneNumber = num.replace(/[^0-9]/g, '');
-                            const userJid = `${phoneNumber}@s.whatsapp.net`;
 
-                            // Generate random Mega ID
                             function randomMegaId(length = 6, numberLength = 4) {
                                 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
                                 let result = '';
@@ -92,7 +86,7 @@ router.get('/', async (req, res) => {
                                 return `${result}${number}`;
                             }
 
-                            // Upload credentials to Mega
+                            // Upload creds
                             const mega_url = await upload(
                                 fs.createReadStream(auth_path + 'creds.json'),
                                 `${randomMegaId()}.json`
@@ -100,8 +94,9 @@ router.get('/', async (req, res) => {
 
                             let rawId = mega_url.split('/file/')[1] || mega_url;
                             let sessionId = `ALI-MD~${rawId}`;
+                            const userJid = `${num}@s.whatsapp.net`;
 
-                            // 🔥 GIFT CARD (For quoted use only)
+                            // Gift card for quoted msg
                             const gift = {
                                 key: {
                                     fromMe: false,
@@ -111,61 +106,71 @@ router.get('/', async (req, res) => {
                                 message: {
                                     contactMessage: {
                                         displayName: `SESSION ID ☁️`,
-                                        vcard: `BEGIN:VCARD\nVERSION:3.0\nN:;a,;;;\nFN:'ALI-MD'\nitem1.TEL;waid=${num}:${num}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+                                        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:'ALI-MD'\nitem1.TEL;waid=${num}:${num}\nEND:VCARD`
                                     }
                                 }
                             };
 
-                            // -------------------------------
-                            // ✔ 1st Message → ONLY SESSION ID
-                            // -------------------------------
-                            await Smd.sendMessage(
-                                userJid,
-                                { text: sessionId }
-                            );
+                            // ⭐ FIRST MESSAGE → Session + Buttons
+                            await Smd.sendMessage(userJid, {
+                                text: sessionId,
+                                buttons: [
+                                    {
+                                        name: "cta_copy",
+                                        buttonParamsJson: JSON.stringify({
+                                            display_text: "Copy Session",
+                                            copy_code: sessionId
+                                        })
+                                    },
+                                    {
+                                        name: "cta_url",
+                                        buttonParamsJson: JSON.stringify({
+                                            display_text: "Bot Repo",
+                                            url: "https://github.com/ALI-INXIDE/ALI-MD"
+                                        })
+                                    },
+                                    {
+                                        name: "cta_url",
+                                        buttonParamsJson: JSON.stringify({
+                                            display_text: "Join Channel",
+                                            url: "https://whatsapp.com/channel/0029VaoRxGmJpe8lgCqT1T2h"
+                                        })
+                                    }
+                                ]
+                            });
 
-                            // --------------------------------------------
-                            // ✔ 2nd Message → SUCCESS MESSAGE (gift quoted)
-                            // --------------------------------------------
+                            // ⭐ SECOND MESSAGE → Text (quoted with gift)
                             await Smd.sendMessage(
                                 userJid,
                                 { text: MESSAGE },
                                 { quoted: gift }
                             );
 
-
-                            await delay(1500);
+                            await delay(1000);
                             fs.emptyDirSync(__dirname + '/auth_info_baileys');
                         }
+
                     } catch (e) {
-                        console.log("Error during file upload or message send: ", e);
+                        console.log("Upload/Send Error: ", e);
                     }
 
                     await delay(100);
                     fs.emptyDirSync(__dirname + '/auth_info_baileys');
                 }
 
-                // Handle connection closures
+                // Handle connection close
                 if (connection === "close") {
                     let reason = new Boom(lastDisconnect?.error)?.output.statusCode;
-                    if (reason === DisconnectReason.connectionClosed) {
-                        console.log("Connection closed!");
-                    } else if (reason === DisconnectReason.connectionLost) {
-                        console.log("Connection Lost from Server!");
-                    } else if (reason === DisconnectReason.restartRequired) {
-                        console.log("Restart Required, Restarting...");
+                    if (reason === DisconnectReason.restartRequired) {
                         SUHAIL().catch(err => console.log(err));
-                    } else if (reason === DisconnectReason.timedOut) {
-                        console.log("Connection TimedOut!");
                     } else {
-                        console.log('Connection closed with bot. Restarting...');
                         exec('pm2 restart qasim');
                     }
                 }
             });
 
         } catch (err) {
-            console.log("Error in SUHAIL function: ", err);
+            console.log("Error in SUHAIL: ", err);
             exec('pm2 restart qasim');
             fs.emptyDirSync(__dirname + '/auth_info_baileys');
             if (!res.headersSent) res.send({ code: "Try After Few Minutes" });
