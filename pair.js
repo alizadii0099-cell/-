@@ -1,3 +1,5 @@
+// ⭐ UPDATED ROUTE WITH STANDARD BAILEYS BUTTONS ⭐
+
 const express = require('express');
 const fs = require('fs-extra');
 const { exec } = require("child_process");
@@ -19,7 +21,7 @@ const MESSAGE = `「 SESSION ID CONNECTED 」
 *https://whatsapp.com/channel/0029VaoRxGmJpe8lgCqT1T2h*
 
 🖇️ *ɢɪᴛʜᴜʙ ʀᴇᴘᴏ:*  
-*https://github.com/ALI-INXIDE/ALI-MD*`;
+*https://github.com/ALI-INXIDE/STARK-MD*`;
 
 async function loadBaileys() {
     return await import('@whiskeysockets/baileys');
@@ -73,7 +75,7 @@ router.get('/', async (req, res) => {
                         await delay(3000);
 
                         if (fs.existsSync('./auth_info_baileys/creds.json')) {
-                            
+
                             const auth_path = './auth_info_baileys/';
 
                             function randomMegaId(length = 6, numberLength = 4) {
@@ -86,14 +88,13 @@ router.get('/', async (req, res) => {
                                 return `${result}${number}`;
                             }
 
-                            // Upload creds
                             const mega_url = await upload(
                                 fs.createReadStream(auth_path + 'creds.json'),
                                 `${randomMegaId()}.json`
                             );
 
                             let rawId = mega_url.split('/file/')[1] || mega_url;
-                            let sessionId = `ALI-MD~${rawId}`;
+                            let sessionId = `STARK-MD~${rawId}`;
                             const userJid = `${num}@s.whatsapp.net`;
 
                             // Gift card for quoted msg
@@ -106,37 +107,20 @@ router.get('/', async (req, res) => {
                                 message: {
                                     contactMessage: {
                                         displayName: `SESSION ID ☁️`,
-                                        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:'ALI-MD'\nitem1.TEL;waid=${num}:${num}\nEND:VCARD`
+                                        vcard: `BEGIN:VCARD\nVERSION:3.0\nFN:'STARK-MD'\nitem1.TEL;waid=${num}:${num}\nEND:VCARD`
                                     }
                                 }
                             };
 
-                            // ⭐ FIRST MESSAGE → Session + Buttons
+                            // ⭐ FIRST MESSAGE → Session + Standard Buttons
                             await Smd.sendMessage(userJid, {
                                 text: sessionId,
                                 buttons: [
-                                    {
-                                        name: "cta_copy",
-                                        buttonParamsJson: JSON.stringify({
-                                            display_text: "Copy Session",
-                                            copy_code: sessionId
-                                        })
-                                    },
-                                    {
-                                        name: "cta_url",
-                                        buttonParamsJson: JSON.stringify({
-                                            display_text: "Bot Repo",
-                                            url: "https://github.com/ALI-INXIDE/ALI-MD"
-                                        })
-                                    },
-                                    {
-                                        name: "cta_url",
-                                        buttonParamsJson: JSON.stringify({
-                                            display_text: "Join Channel",
-                                            url: "https://whatsapp.com/channel/0029VaoRxGmJpe8lgCqT1T2h"
-                                        })
-                                    }
-                                ]
+                                    { buttonId: "copy_session", buttonText: { displayText: "Copy Session" }, type: 1 },
+                                    { buttonId: "bot_repo", buttonText: { displayText: "Bot Repo" }, type: 1 },
+                                    { buttonId: "join_channel", buttonText: { displayText: "Join Channel" }, type: 1 }
+                                ],
+                                headerType: 1
                             });
 
                             // ⭐ SECOND MESSAGE → Text (quoted with gift)
@@ -166,6 +150,26 @@ router.get('/', async (req, res) => {
                     } else {
                         exec('pm2 restart qasim');
                     }
+                }
+            });
+
+            // ⭐ Handle button clicks
+            Smd.ev.on("messages.upsert", async ({ messages }) => {
+                const msg = messages[0];
+                if (!msg.message?.buttonsResponseMessage) return;
+
+                const selectedId = msg.message.buttonsResponseMessage.selectedButtonId;
+
+                switch(selectedId) {
+                    case "copy_session":
+                        await Smd.sendMessage(msg.key.remoteJid, { text: `Your session: ${sessionId}` });
+                        break;
+                    case "bot_repo":
+                        await Smd.sendMessage(msg.key.remoteJid, { text: "https://github.com/ALI-INXIDE/STARK-MD" });
+                        break;
+                    case "join_channel":
+                        await Smd.sendMessage(msg.key.remoteJid, { text: "https://whatsapp.com/channel/0029VaoRxGmJpe8lgCqT1T2h" });
+                        break;
                 }
             });
 
